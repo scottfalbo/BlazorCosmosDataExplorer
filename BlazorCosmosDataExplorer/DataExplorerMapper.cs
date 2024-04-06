@@ -2,7 +2,6 @@
 // Cosmos Data Explorer
 // ------------------------------------
 
-using BlazorCosmosDataExplorer.Models;
 using Riok.Mapperly.Abstractions;
 
 namespace BlazorCosmosDataExplorer;
@@ -10,5 +9,5 @@ namespace BlazorCosmosDataExplorer;
 [Mapper]
 public partial class DataExplorerMapper
 {
-    public partial DomainModel ToDomainModel(StorageContract storageContract);
+    public partial object ToDomainModel(object storageContract);
 }

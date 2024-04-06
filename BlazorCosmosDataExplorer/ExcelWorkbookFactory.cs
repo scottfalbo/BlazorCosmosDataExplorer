@@ -2,14 +2,13 @@
 // Cosmos Data Explorer
 // ------------------------------------
 
-using BlazorCosmosDataExplorer.Models;
 using ClosedXML.Excel;
 
 namespace BlazorCosmosDataExplorer;
 
 public class ExcelWorkbookFactory : IExcelWorkbookFactory
 {
-    public byte[] Create(List<DomainModel> domainModels)
+    public byte[] Create(List<object> domainModels)
     {
         using var workbook = new XLWorkbook();
 

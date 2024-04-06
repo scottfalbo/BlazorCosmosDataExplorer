@@ -9,10 +9,6 @@ namespace BlazorCosmosDataExplorer;
 
 public class DataExplorerProcessor : IDataExplorerProcessor
 {
-    private readonly IDataExplorerRepository _dataExplorerRepository;
-    private readonly IExcelWorkbookFactory _excelWorkbookFactory;
-    private readonly IJSRuntime _jsRuntime;
-
     public DataExplorerProcessor(
         IDataExplorerRepository dataExplorerRepository,
         IExcelWorkbookFactory excelWorkbookFactory,
@@ -23,7 +19,7 @@ public class DataExplorerProcessor : IDataExplorerProcessor
         _jsRuntime = jSRuntime;
     }
 
-    public async Task DownloadExcel(List<DomainModel> domainModels)
+    public async Task DownloadExcel(List<object> domainModels)
     {
         var excelData = _excelWorkbookFactory.Create(domainModels);
 
@@ -35,9 +31,13 @@ public class DataExplorerProcessor : IDataExplorerProcessor
         await _jsRuntime.InvokeVoidAsync("downloadFileFromBase64", fileName, dataUrl);
     }
 
-    public async Task<List<DomainModel>> Process(QueryInput queryInput)
+    public async Task<List<object>> Process(QueryInput queryInput)
     {
         var response = await _dataExplorerRepository.GetItems(queryInput);
         return response;
     }
+
+    private readonly IDataExplorerRepository _dataExplorerRepository;
+    private readonly IExcelWorkbookFactory _excelWorkbookFactory;
+    private readonly IJSRuntime _jsRuntime;
 }
