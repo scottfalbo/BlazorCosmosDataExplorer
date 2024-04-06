@@ -5,6 +5,8 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
+#nullable disable
+
 namespace BlazorCosmosDataExplorer.Models;
 
 [JsonObject(NamingStrategyType = typeof(CamelCaseNamingStrategy), ItemNullValueHandling = NullValueHandling.Ignore)]
@@ -15,7 +17,7 @@ public class StorageContract
     public string DocumentId { get; set; }
 
     [JsonRequired]
-    public Guid Id { get; set; }
+    public string Id { get; set; }
 
     [JsonRequired]
     public string Name { get; set; }
@@ -26,15 +28,6 @@ public class StorageContract
     public decimal Revenue { get; set; }
 
     public DateTimeOffset UpdatedDate { get; set; }
-
-    public StorageContract(DomainModel domainModel)
-    {
-        Id = domainModel.Id;
-        Name = domainModel.Name;
-        DocumentId = domainModel.DocumentId;
-        PartitionKey = domainModel.PartitionKey;
-        Revenue = domainModel.Revenue;
-        CreatedDate = domainModel.CreatedDate;
-        UpdatedDate = domainModel.UpdatedDate;
-    }
 }
+
+#nullable enable

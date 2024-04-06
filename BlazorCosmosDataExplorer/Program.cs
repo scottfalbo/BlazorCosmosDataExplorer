@@ -10,14 +10,18 @@ using Microsoft.Azure.Cosmos;
 var builder = WebApplication.CreateBuilder(args);
 var serviceConfiguration = CreateServiceConfiguration(builder, builder.Configuration);
 
-builder.Services.AddTransient<IDataExplorerProcessor, DataExplorerProcessor>();
-builder.Services.AddTransient<IDataExplorerRepository, DataExplorerRepository>();
-
 var cosmosEndpoint = serviceConfiguration.CosmosEndpoint;
 var cosmosKey = serviceConfiguration.CosmosKey;
 var cosmosClient = new CosmosClient(cosmosEndpoint, cosmosKey);
 
-builder.Services.AddSingleton(new DataExplorerClient(cosmosClient));
+builder.Services.AddSingleton<IDataExplorerClient, DataExplorerClient>(sp =>
+{
+    var cosmosClient = new CosmosClient(serviceConfiguration.CosmosEndpoint, serviceConfiguration.CosmosKey);
+    return new DataExplorerClient(cosmosClient);
+});
+
+builder.Services.AddTransient<IDataExplorerProcessor, DataExplorerProcessor>();
+builder.Services.AddTransient<IDataExplorerRepository, DataExplorerRepository>();
 
 // Add services to the container.
 builder.Services.AddRazorPages();

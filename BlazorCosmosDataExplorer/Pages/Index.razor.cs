@@ -25,7 +25,8 @@ public partial class Index : ComponentBase
     private async Task ProcessQuery()
     {
         var queryInput = new QueryInput(Query, Container, Database);
-        Results = await DataExplorerProcessor.Process(queryInput);
+        var results = await DataExplorerProcessor.Process(queryInput);
+        Results = results;
     }
 }
 
