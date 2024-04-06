@@ -27,13 +27,13 @@
             @foreach (var result in Results)
             {
                 <tr>
-                    <td>@result.CreatedDate.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                    <td>@result.CreatedDate?.ToString("yyyy-MM-dd HH:mm:ss")</td>
                     <td>@result.DocumentId</td>
                     <td>@result.Id</td>
                     <td>@result.Name</td>
                     <td>@result.PartitionKey</td>
-                    <td>@result.Revenue.ToString("C")</td>
-                    <td>@result.UpdatedDate.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                    <td>@result.Revenue?.ToString("C")</td>
+                    <td>@result.UpdatedDate?.ToString("yyyy-MM-dd HH:mm:ss")</td>
                 </tr>
             }
         </tbody>
