@@ -1,4 +1,6 @@
-
+// ------------------------------------
+// Cosmos Data Explorer
+// ------------------------------------
 
 var builder = WebApplication.CreateBuilder(args);
 
