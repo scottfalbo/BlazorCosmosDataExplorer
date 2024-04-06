@@ -6,9 +6,7 @@ using BlazorCosmosDataExplorer.Models;
 
 namespace BlazorCosmosDataExplorer;
 
-public interface IDataExplorerProcessor
+public interface IExcelWorkbookFactory
 {
-    Task DownloadExcel(List<DomainModel> domainModels);
-
-    Task<List<DomainModel>> Process(QueryInput query);
+    byte[] Create(List<DomainModel> domainModels);
 }

@@ -22,6 +22,7 @@ builder.Services.AddSingleton<IDataExplorerClient, DataExplorerClient>(sp =>
 
 builder.Services.AddTransient<IDataExplorerProcessor, DataExplorerProcessor>();
 builder.Services.AddTransient<IDataExplorerRepository, DataExplorerRepository>();
+builder.Services.AddTransient<IExcelWorkbookFactory, ExcelWorkbookFactory>();
 
 // Add services to the container.
 builder.Services.AddRazorPages();

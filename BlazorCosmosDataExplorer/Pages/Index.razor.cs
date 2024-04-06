@@ -12,7 +12,7 @@ namespace BlazorCosmosDataExplorer.Pages;
 public partial class Index : ComponentBase
 {
     [Inject]
-    public IDataExplorerProcessor DataExplorerProcessor { get; set; }
+    private IDataExplorerProcessor _dataExplorerProcessor { get; set; }
 
     private string Container { get; set; } = "ContainerOne";
 
@@ -20,12 +20,20 @@ public partial class Index : ComponentBase
 
     private string Query { get; set; }
 
-    private List<DomainModel> Results { get; set; }
+    private List<DomainModel> Results { get; set; } = new();
+
+    private void DownloadExcel()
+    {
+        if (Results.Count > 0)
+        {
+            _dataExplorerProcessor.DownloadExcel(Results);
+        }
+    }
 
     private async Task ProcessQuery()
     {
         var queryInput = new QueryInput(Query, Container, Database);
-        var results = await DataExplorerProcessor.Process(queryInput);
+        var results = await _dataExplorerProcessor.Process(queryInput);
         Results = results;
     }
 }
