@@ -8,5 +8,5 @@ namespace BlazorCosmosDataExplorer;
 
 public interface IDataExplorerProcessor
 {
-    Task<List<DomainModel>> Process(string query);
+    Task<List<DomainModel>> Process(QueryInput query);
 }

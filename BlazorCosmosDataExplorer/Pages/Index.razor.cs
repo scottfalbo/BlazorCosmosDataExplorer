@@ -14,13 +14,18 @@ public partial class Index : ComponentBase
     [Inject]
     public IDataExplorerProcessor DataExplorerProcessor { get; set; }
 
+    private string Container { get; set; } = "ContainerOne";
+
+    private string Database { get; set; } = "PaleSpecter";
+
     private string Query { get; set; }
 
     private List<DomainModel> Results { get; set; }
 
     private async Task ProcessQuery()
     {
-        Results = await DataExplorerProcessor.Process(Query);
+        var queryInput = new QueryInput(Query, Container, Database);
+        Results = await DataExplorerProcessor.Process(queryInput);
     }
 }
 

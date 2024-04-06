@@ -15,9 +15,9 @@ public class DataExplorerProcessor : IDataExplorerProcessor
         _dataExplorerRepository = dataExplorerRepository;
     }
 
-    public async Task<List<DomainModel>> Process(string query)
+    public async Task<List<DomainModel>> Process(QueryInput queryInput)
     {
-        var response = await _dataExplorerRepository.GetItems(query);
+        var response = await _dataExplorerRepository.GetItems(queryInput);
         return response;
     }
 }

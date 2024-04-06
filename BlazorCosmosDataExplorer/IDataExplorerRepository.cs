@@ -8,5 +8,5 @@ namespace BlazorCosmosDataExplorer;
 
 public interface IDataExplorerRepository
 {
-    Task<List<DomainModel>> GetItems(string query);
+    Task<List<DomainModel>> GetItems(QueryInput queryInput);
 }
