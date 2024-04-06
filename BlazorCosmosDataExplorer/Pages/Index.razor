@@ -9,11 +9,16 @@
     <button type="button" @onclick="ProcessQuery">Search</button>
 </form>
 
+<label class="switch">
+    <input type="checkbox" @bind="AppendResults">
+    <span class="slider round"></span>
+</label>
+
 <button @onclick="DownloadExcel">Download Excel</button>
 
 @if (Results.Count > 0)
 {
-    <DomainModelView Results="Results" />
+    <DomainModelView Results=Results OnSortRequest="SortTable" />
 }
 else
 {

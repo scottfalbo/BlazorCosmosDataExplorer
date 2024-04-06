@@ -16,9 +16,15 @@ public partial class Index : ComponentBase
     [Inject]
     private IDataExplorerProcessor _dataExplorerProcessor { get; set; }
 
+    private bool AppendResults { get; set; } = false;
+
     private string Container { get; set; } = "ContainerOne";
 
+    private string CurrentSortColumn { get; set; }
+
     private string Database { get; set; } = "PaleSpecter";
+
+    private bool IsSortAscending { get; set; } = true;
 
     [Inject]
     private IJSRuntime JSRuntime { get; set; }
@@ -33,6 +39,13 @@ public partial class Index : ComponentBase
         {
             await JSRuntime.InvokeVoidAsync("preventShiftEnter", "query_field");
         }
+    }
+
+    private void DeDupe()
+    {
+        var deDupedResults = Results.GroupBy(x => x.Id).Select(x => x.First()).ToList();
+        Results.Clear();
+        Results.AddRange(deDupedResults);
     }
 
     private void DownloadExcel()
@@ -60,10 +73,41 @@ public partial class Index : ComponentBase
 
     private async Task ProcessQuery()
     {
-        Results.Clear();
+        if (!AppendResults)
+        {
+            Results.Clear();
+        }
+
         var queryInput = new QueryInput(Query, Container, Database);
         var results = await _dataExplorerProcessor.Process(queryInput);
-        Results = results;
+
+        Results.AddRange(results);
+        DeDupe();
+    }
+
+    private List<DomainModel> SortResults(List<DomainModel> results, string columnName, bool ascending)
+    {
+        var propertyInfo = typeof(DomainModel).GetProperty(columnName);
+        if (propertyInfo == null) return results;
+
+        return ascending
+            ? results.OrderBy(e => propertyInfo.GetValue(e, null)).ToList()
+            : results.OrderByDescending(e => propertyInfo.GetValue(e, null)).ToList();
+    }
+
+    private void SortTable(string columnName)
+    {
+        if (columnName == CurrentSortColumn)
+        {
+            IsSortAscending = !IsSortAscending;
+        }
+        else
+        {
+            CurrentSortColumn = columnName;
+            IsSortAscending = true;
+        }
+
+        Results = SortResults(Results!, CurrentSortColumn, IsSortAscending);
     }
 }
 

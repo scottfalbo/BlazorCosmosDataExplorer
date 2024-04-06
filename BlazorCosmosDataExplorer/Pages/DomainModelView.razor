@@ -3,6 +3,10 @@
 @code {
     [Parameter]
     public List<DomainModel>? Results { get; set; }
+
+    [Parameter]
+    public EventCallback<string> OnSortRequest { get; set; }
+
 }
 
 @if (Results != null && Results.Count > 0)
@@ -10,13 +14,13 @@
     <table class="table">
         <thead>
             <tr>
-                <th>Created Date</th>
-                <th>Document ID</th>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Partition Key</th>
-                <th>Revenue</th>
-                <th>Updated Date</th>
+                <th @onclick="() => OnSortRequest.InvokeAsync(nameof(DomainModel.CreatedDate))">CreatedDate</th>
+                <th @onclick="() => OnSortRequest.InvokeAsync(nameof(DomainModel.DocumentId))">Document ID</th>
+                <th @onclick="() => OnSortRequest.InvokeAsync(nameof(DomainModel.Id))">Id</th>
+                <th @onclick="() => OnSortRequest.InvokeAsync(nameof(DomainModel.Name))">Name</th>
+                <th @onclick="() => OnSortRequest.InvokeAsync(nameof(DomainModel.PartitionKey))">PartitionKey</th>
+                <th @onclick="() => OnSortRequest.InvokeAsync(nameof(DomainModel.Revenue))">Revenue</th>
+                <th @onclick="() => OnSortRequest.InvokeAsync(nameof(DomainModel.UpdatedDate))">UpdatedDate</th>
             </tr>
         </thead>
         <tbody>
@@ -34,6 +38,7 @@
             }
         </tbody>
     </table>
+
 }
 else
 {
