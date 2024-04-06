@@ -85,16 +85,6 @@ public partial class Index : ComponentBase
         DeDupe();
     }
 
-    private List<DomainModel> SortResults(List<DomainModel> results, string columnName, bool ascending)
-    {
-        var propertyInfo = typeof(DomainModel).GetProperty(columnName);
-        if (propertyInfo == null) return results;
-
-        return ascending
-            ? results.OrderBy(e => propertyInfo.GetValue(e, null)).ToList()
-            : results.OrderByDescending(e => propertyInfo.GetValue(e, null)).ToList();
-    }
-
     private void SortTable(string columnName)
     {
         if (columnName == CurrentSortColumn)
@@ -107,7 +97,7 @@ public partial class Index : ComponentBase
             IsSortAscending = true;
         }
 
-        Results = SortResults(Results!, CurrentSortColumn, IsSortAscending);
+        Results = Results.SortResults(CurrentSortColumn, IsSortAscending);
     }
 }
 
