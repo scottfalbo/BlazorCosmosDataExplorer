@@ -11,6 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 var serviceConfiguration = CreateServiceConfiguration(builder, builder.Configuration);
 
 builder.Services.AddTransient<IDataExplorerProcessor, DataExplorerProcessor>();
+builder.Services.AddTransient<IDataExplorerRepository, DataExplorerRepository>();
 
 var cosmosEndpoint = serviceConfiguration.CosmosEndpoint;
 var cosmosKey = serviceConfiguration.CosmosKey;
