@@ -1,9 +1,20 @@
 ﻿@page "/"
 
-<PageTitle>Index</PageTitle>
+<PageTitle>Cosmos Data Explorer</PageTitle>
 
-<h1>Hello, world!</h1>
+<h1>Cosmos Data Explorer</h1>
 
-Welcome to your new app.
+<form>
+    <input type="text" @bind="Query" />
+    <button type="button" @onclick="ProcessQuery">Search</button>
+</form>
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+@if (Results != null)
+{
+    <div>
+        @foreach (var result in Results)
+        {
+            <p>@result.Name</p>
+        }
+    </div>
+}

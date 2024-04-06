@@ -10,6 +10,8 @@ using Microsoft.Azure.Cosmos;
 var builder = WebApplication.CreateBuilder(args);
 var serviceConfiguration = CreateServiceConfiguration(builder, builder.Configuration);
 
+builder.Services.AddTransient<IDataExplorerProcessor, DataExplorerProcessor>();
+
 var cosmosEndpoint = serviceConfiguration.CosmosEndpoint;
 var cosmosKey = serviceConfiguration.CosmosKey;
 var cosmosClient = new CosmosClient(cosmosEndpoint, cosmosKey);
