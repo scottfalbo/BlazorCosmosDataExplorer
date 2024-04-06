@@ -6,15 +6,13 @@ namespace BlazorCosmosDataExplorer.Models;
 
 public record QueryInput
 {
+    public string Container { get; }
+    public string Database { get; }
     public string Query { get; }
 
-    public string Container { get; }
-
-    public string Database { get; }
-
-    public QueryInput(string query, string container, string database)
+    public QueryInput(string userInput, string container, string database)
     {
-        Query = query;
+        Query = userInput;
         Container = container;
         Database = database;
     }

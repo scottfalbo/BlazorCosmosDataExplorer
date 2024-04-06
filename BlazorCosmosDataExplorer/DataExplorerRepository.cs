@@ -2,11 +2,8 @@
 // Cosmos Data Explorer
 // ------------------------------------
 
-using Azure;
 using BlazorCosmosDataExplorer.Models;
 using Microsoft.Azure.Cosmos;
-using Microsoft.Azure.Cosmos.Serialization.HybridRow.Schemas;
-using System.ComponentModel;
 using System.Net;
 
 namespace BlazorCosmosDataExplorer;
@@ -23,55 +20,21 @@ public class DataExplorerRepository : IDataExplorerRepository
 
     public async Task<List<DomainModel>> GetItems(QueryInput queryInput)
     {
-        var scryer = _dataExplorerClient.CreateClient();
-        var container = scryer.GetContainer(queryInput.Database, queryInput.Container);
+        var client = _dataExplorerClient.CreateClient();
+        var container = client.GetContainer(queryInput.Database, queryInput.Container);
 
         var domainModels = new List<DomainModel>();
 
         try
         {
-            //var container = GetContainer(ContainerId, serviceContext);
-            //var queryString = "SELECT * FROM LedgerEntry e WHERE e.partitionKey = @partitionKey AND e.operationId = @operationId";
+            var queryDefinition = new QueryDefinition(queryInput.Query);
 
-            //if (!includeReverted)
-            //{
-            //    queryString += " AND NOT IS_DEFINED(e.revertedOn)";
-            //}
+            using var resultIterator = container.GetItemQueryIterator<StorageContract>(queryDefinition);
 
-            //var queryDefinition = new QueryDefinition(queryString)
-            //    .WithParameter("@partitionKey", partitionKey)
-            //    .WithParameter("@operationId", operationId);
-
-            //using var resultIterator = container.GetItemQueryIterator<LedgerEntryStorageContractV2>(queryDefinition);
-
-            //var list = new List<LedgerEntryStorageContractV2>();
-            //while (resultIterator.HasMoreResults)
-            //{
-            //    var currentSet = await resultIterator.ReadNextAsync(serviceContext.IsTest());
-            //    list.AddRange
-        }
-        catch (CosmosException ex) when (ex.StatusCode == HttpStatusCode.NotFound)
-        {
-            return new List<DomainModel>();
-        }
-        catch (Exception ex)
-        {
-            throw new Exception(ex.Message, ex);
-        }
-
-        try
-        {
-            var query = container.GetItemQueryIterator<StorageContract>(queryInput.Query);
-
-            while (query.HasMoreResults)
+            while (resultIterator.HasMoreResults)
             {
-                var results = await query.ReadNextAsync();
-
-                foreach (var storageContact in results)
-                {
-                    var domainModel = _mapper.ToDomainModel(storageContact);
-                    domainModels.Add(domainModel);
-                }
+                var storageContracts = await resultIterator.ReadNextAsync();
+                domainModels.AddRange(storageContracts.Select(x => _mapper.ToDomainModel(x)));
             }
 
             return domainModels;
