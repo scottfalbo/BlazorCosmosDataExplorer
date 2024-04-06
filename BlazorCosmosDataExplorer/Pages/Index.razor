@@ -4,19 +4,30 @@
 
 <h1>Cosmos Data Explorer</h1>
 
-<form>
-    <input type="text" @bind="Query" />
+<form @onsubmit="HandleFormSubmit">
+    <textarea id="query_field" @bind="Query" @onkeydown="HandleKeyDown" rows="10"></textarea>
     <button type="button" @onclick="ProcessQuery">Search</button>
 </form>
 
 <button @onclick="DownloadExcel">Download Excel</button>
 
-@if (Results != null)
+@if (Results.Count > 0)
 {
-    <div>
-        @foreach (var result in Results)
+    <DomainModelView Results="Results" />
+}
+else
+{
+    <p>No results found.</p>
+}
+
+@inject IJSRuntime JSRuntime
+
+@code {
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
         {
-            <p>@result.Name</p>
+            await JSRuntime.InvokeVoidAsync("preventShiftEnter", "query_field");
         }
-    </div>
+    }
 }

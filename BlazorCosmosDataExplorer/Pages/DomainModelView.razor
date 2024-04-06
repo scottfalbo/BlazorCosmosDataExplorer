@@ -1,0 +1,41 @@
+﻿@using BlazorCosmosDataExplorer.Models
+
+@code {
+    [Parameter]
+    public List<DomainModel>? Results { get; set; }
+}
+
+@if (Results != null && Results.Count > 0)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Created Date</th>
+                <th>Document ID</th>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Partition Key</th>
+                <th>Revenue</th>
+                <th>Updated Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var result in Results)
+            {
+                <tr>
+                    <td>@result.CreatedDate.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                    <td>@result.DocumentId</td>
+                    <td>@result.Id</td>
+                    <td>@result.Name</td>
+                    <td>@result.PartitionKey</td>
+                    <td>@result.Revenue.ToString("C")</td>
+                    <td>@result.UpdatedDate.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No results found.</p>
+}

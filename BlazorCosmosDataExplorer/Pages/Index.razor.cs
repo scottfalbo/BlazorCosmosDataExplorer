@@ -4,6 +4,7 @@
 
 using BlazorCosmosDataExplorer.Models;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
 
 namespace BlazorCosmosDataExplorer.Pages;
 
@@ -30,8 +31,24 @@ public partial class Index : ComponentBase
         }
     }
 
+    private Task HandleFormSubmit()
+    {
+        // Prevent the form from submitting when the Enter key is pressed without Shift.
+        // This is called on form submission, which we don't want to happen on just Enter.
+        return Task.CompletedTask;
+    }
+
+    private async Task HandleKeyDown(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter" && e.ShiftKey)
+        {
+            await ProcessQuery();
+        }
+    }
+
     private async Task ProcessQuery()
     {
+        Results.Clear();
         var queryInput = new QueryInput(Query, Container, Database);
         var results = await _dataExplorerProcessor.Process(queryInput);
         Results = results;
