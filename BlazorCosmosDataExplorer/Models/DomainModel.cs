@@ -2,17 +2,17 @@
 // Cosmos Data Explorer
 // ------------------------------------
 
-namespace BlazorCosmosDataExplorer;
+namespace BlazorCosmosDataExplorer.Models;
 
 public record DomainModel
 {
     public Guid Id { get; set; }
 
-    public string Name { get; set; }
+    public string Name { get; set; } = string.Empty;
 
-    public string DocumentId { get; set; }
+    public string DocumentId { get; set; } = string.Empty;
 
-    public string PartitionKey { get; set; }
+    public string PartitionKey { get; set; } = string.Empty;
 
     public decimal Revenue { get; set; }
 
