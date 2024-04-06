@@ -19,15 +19,3 @@ else
 {
     <p>No results found.</p>
 }
-
-@inject IJSRuntime JSRuntime
-
-@code {
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (firstRender)
-        {
-            await JSRuntime.InvokeVoidAsync("preventShiftEnter", "query_field");
-        }
-    }
-}

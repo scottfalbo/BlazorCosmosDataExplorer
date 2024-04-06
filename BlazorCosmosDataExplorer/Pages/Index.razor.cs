@@ -5,6 +5,7 @@
 using BlazorCosmosDataExplorer.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
+using Microsoft.JSInterop;
 
 namespace BlazorCosmosDataExplorer.Pages;
 
@@ -19,9 +20,20 @@ public partial class Index : ComponentBase
 
     private string Database { get; set; } = "PaleSpecter";
 
+    [Inject]
+    private IJSRuntime JSRuntime { get; set; }
+
     private string Query { get; set; }
 
     private List<DomainModel> Results { get; set; } = new();
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JSRuntime.InvokeVoidAsync("preventShiftEnter", "query_field");
+        }
+    }
 
     private void DownloadExcel()
     {
