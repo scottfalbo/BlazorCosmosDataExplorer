@@ -29,7 +29,7 @@ public partial class Index : ComponentBase
     [Inject]
     private IJSRuntime JSRuntime { get; set; }
 
-    private string Query { get; set; }
+    private string Query { get; set; } = "select * from c where c.partitionKey = \"partitionKey_01\"";
 
     private List<DomainModel> Results { get; set; } = new();
 
