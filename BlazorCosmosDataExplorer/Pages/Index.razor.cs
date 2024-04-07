@@ -6,7 +6,6 @@ using BlazorCosmosDataExplorer.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.JSInterop;
-using System.Dynamic;
 
 namespace BlazorCosmosDataExplorer.Pages;
 
@@ -32,7 +31,7 @@ public partial class Index : ComponentBase
 
     private string Query { get; set; } = "select * from c where c.partitionKey = \"partitionKey_01\"";
 
-    private List<ExpandoObject> Results { get; set; } = new();
+    private List<dynamic> Results { get; set; } = new();
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {

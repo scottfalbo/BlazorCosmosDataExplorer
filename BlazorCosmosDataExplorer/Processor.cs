@@ -25,7 +25,7 @@ public class Processor : IProcessor
         _jsRuntime = jSRuntime;
     }
 
-    public async Task DownloadExcel(List<ExpandoObject> domainModels)
+    public async Task DownloadExcel(List<dynamic> domainModels)
     {
         var excelData = _excelWorkbookFactory.Create(domainModels);
 

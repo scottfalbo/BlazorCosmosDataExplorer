@@ -8,7 +8,7 @@ namespace BlazorCosmosDataExplorer;
 
 public interface IProcessor
 {
-    Task DownloadExcel(List<ExpandoObject> domainModels);
+    Task DownloadExcel(List<dynamic> domainModels);
 
     Task<List<ExpandoObject>> Process(QueryInput query);
 }

@@ -2,19 +2,14 @@
 // Cosmos Data Explorer
 // ------------------------------------
 
-using System.Dynamic;
-
 namespace BlazorCosmosDataExplorer.Models;
 
 public static class Extensions
 {
-    public static List<ExpandoObject> SortResults(this List<ExpandoObject> results, string columnName, bool ascending)
+    public static List<dynamic> SortResults(this List<dynamic> results, string columnName, bool ascending)
     {
-        var propertyInfo = typeof(object).GetProperty(columnName);
-        if (propertyInfo == null) return results;
-
         return ascending
-            ? results.OrderBy(e => propertyInfo.GetValue(e, null)).ToList()
-            : results.OrderByDescending(e => propertyInfo.GetValue(e, null)).ToList();
+            ? results.OrderBy(x => ((IDictionary<string, object>)x)[columnName]).ToList()
+            : results.OrderByDescending(x => ((IDictionary<string, object>)x)[columnName]).ToList();
     }
 }

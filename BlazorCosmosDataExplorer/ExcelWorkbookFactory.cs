@@ -3,13 +3,12 @@
 // ------------------------------------
 
 using ClosedXML.Excel;
-using System.Dynamic;
 
 namespace BlazorCosmosDataExplorer;
 
 public class ExcelWorkbookFactory : IExcelWorkbookFactory
 {
-    public byte[] Create(List<ExpandoObject> domainModels)
+    public byte[] Create(List<dynamic> domainModels)
     {
         using var workbook = new XLWorkbook();
 
