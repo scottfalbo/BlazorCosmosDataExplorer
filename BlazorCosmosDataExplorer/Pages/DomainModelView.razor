@@ -14,29 +14,28 @@
     <table class="table">
         <thead>
             <tr>
-                <th @onclick="() => OnSortRequest.InvokeAsync(nameof(DomainModel.CreatedDate))">CreatedDate</th>
-                <th @onclick="() => OnSortRequest.InvokeAsync(nameof(DomainModel.DocumentId))">Document ID</th>
-                <th @onclick="() => OnSortRequest.InvokeAsync(nameof(DomainModel.Id))">Id</th>
-                <th @onclick="() => OnSortRequest.InvokeAsync(nameof(DomainModel.Name))">Name</th>
-                <th @onclick="() => OnSortRequest.InvokeAsync(nameof(DomainModel.PartitionKey))">PartitionKey</th>
-                <th @onclick="() => OnSortRequest.InvokeAsync(nameof(DomainModel.Revenue))">Revenue</th>
-                <th @onclick="() => OnSortRequest.InvokeAsync(nameof(DomainModel.UpdatedDate))">UpdatedDate</th>
+                @if (Results != null && Results.Any())
+                {
+                    var firstItem = Results.First();
+                    foreach (var property in ((IDictionary<string, object>)firstItem).Keys)
+                    {
+                        <th @onclick="() => OnSortRequest.InvokeAsync(property)">@property</th>
+                    }
+                }
             </tr>
         </thead>
         <tbody>
-            @foreach (var result in Results)
+            @foreach (var item in Results!)
             {
                 <tr>
-                    <td>@result.CreatedDate?.ToString("yyyy-MM-dd HH:mm:ss")</td>
-                    <td>@result.DocumentId</td>
-                    <td>@result.Id</td>
-                    <td>@result.Name</td>
-                    <td>@result.PartitionKey</td>
-                    <td>@result.Revenue?.ToString("C")</td>
-                    <td>@result.UpdatedDate?.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                    @foreach (var kvp in (IDictionary<string, object>)item)
+                    {
+                        <td>@kvp.Value?.ToString()</td>
+                    }
                 </tr>
             }
         </tbody>
+
     </table>
 
 }

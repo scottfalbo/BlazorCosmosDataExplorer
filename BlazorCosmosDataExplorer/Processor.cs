@@ -2,6 +2,7 @@
 // Cosmos Data Explorer
 // ------------------------------------
 
+using BlazorCosmosDataExplorer.Models;
 using Microsoft.JSInterop;
 using System.Dynamic;
 
@@ -40,6 +41,9 @@ public class Processor : IProcessor
     public async Task<List<ExpandoObject>> Process(QueryInput queryInput)
     {
         var response = await _dataExplorerRepository.GetItems(queryInput);
-        return response;
+
+        var filteredResults = (List<ExpandoObject>)response.FilterProperties();
+
+        return filteredResults;
     }
 }
