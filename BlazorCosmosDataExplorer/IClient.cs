@@ -2,11 +2,11 @@
 // Cosmos Data Explorer
 // ------------------------------------
 
-using System.Dynamic;
+using Microsoft.Azure.Cosmos;
 
 namespace BlazorCosmosDataExplorer;
 
-public interface IDataExplorerRepository
+public interface IClient
 {
-    Task<List<ExpandoObject>> GetItems(QueryInput queryInput);
+    CosmosClient CreateClient();
 }

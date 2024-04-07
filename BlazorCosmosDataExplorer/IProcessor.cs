@@ -6,7 +6,7 @@ using System.Dynamic;
 
 namespace BlazorCosmosDataExplorer;
 
-public interface IDataExplorerProcessor
+public interface IProcessor
 {
     Task DownloadExcel(List<ExpandoObject> domainModels);
 

@@ -7,7 +7,7 @@ using Riok.Mapperly.Abstractions;
 namespace BlazorCosmosDataExplorer;
 
 [Mapper]
-public partial class DataExplorerMapper
+public partial class Mapper
 {
     public partial object ToDomainModel(object storageContract);
 }

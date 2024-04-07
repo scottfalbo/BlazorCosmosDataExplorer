@@ -15,7 +15,7 @@ namespace BlazorCosmosDataExplorer.Pages;
 public partial class Index : ComponentBase
 {
     [Inject]
-    private IDataExplorerProcessor _dataExplorerProcessor { get; set; }
+    private IProcessor _dataExplorerProcessor { get; set; }
 
     private bool AppendResults { get; set; } = false;
 

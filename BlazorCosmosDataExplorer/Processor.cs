@@ -7,16 +7,16 @@ using System.Dynamic;
 
 namespace BlazorCosmosDataExplorer;
 
-public class DataExplorerProcessor : IDataExplorerProcessor
+public class Processor : IProcessor
 {
-    private readonly IDataExplorerRepository _dataExplorerRepository;
+    private readonly IRepository _dataExplorerRepository;
 
     private readonly IExcelWorkbookFactory _excelWorkbookFactory;
 
     private readonly IJSRuntime _jsRuntime;
 
-    public DataExplorerProcessor(
-        IDataExplorerRepository dataExplorerRepository,
+    public Processor(
+        IRepository dataExplorerRepository,
         IExcelWorkbookFactory excelWorkbookFactory,
         IJSRuntime jSRuntime)
     {

@@ -13,14 +13,14 @@ var cosmosEndpoint = serviceConfiguration.CosmosEndpoint;
 var cosmosKey = serviceConfiguration.CosmosKey;
 var cosmosClient = new CosmosClient(cosmosEndpoint, cosmosKey);
 
-builder.Services.AddSingleton<IDataExplorerClient, DataExplorerClient>(sp =>
+builder.Services.AddSingleton<IClient, Client>(sp =>
 {
     var cosmosClient = new CosmosClient(serviceConfiguration.CosmosEndpoint, serviceConfiguration.CosmosKey);
-    return new DataExplorerClient(cosmosClient);
+    return new Client(cosmosClient);
 });
 
-builder.Services.AddTransient<IDataExplorerProcessor, DataExplorerProcessor>();
-builder.Services.AddTransient<IDataExplorerRepository, DataExplorerRepository>();
+builder.Services.AddTransient<IProcessor, Processor>();
+builder.Services.AddTransient<IRepository, Repository>();
 builder.Services.AddTransient<IExcelWorkbookFactory, ExcelWorkbookFactory>();
 
 // Add services to the container.

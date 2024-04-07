@@ -6,7 +6,7 @@ using System.Dynamic;
 
 namespace BlazorCosmosDataExplorer.Models;
 
-public static class DomainModelExtensions
+public static class Extensions
 {
     public static List<ExpandoObject> SortResults(this List<ExpandoObject> results, string columnName, bool ascending)
     {

@@ -6,11 +6,11 @@ using Microsoft.Azure.Cosmos;
 
 namespace BlazorCosmosDataExplorer;
 
-public class DataExplorerClient : IDataExplorerClient
+public class Client : IClient
 {
     private readonly CosmosClient _cosmosClient;
 
-    public DataExplorerClient(CosmosClient cosmosClient)
+    public Client(CosmosClient cosmosClient)
     {
         _cosmosClient = cosmosClient;
     }

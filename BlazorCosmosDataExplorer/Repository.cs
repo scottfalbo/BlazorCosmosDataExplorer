@@ -8,11 +8,11 @@ using System.Net;
 
 namespace BlazorCosmosDataExplorer;
 
-public class DataExplorerRepository : IDataExplorerRepository
+public class Repository : IRepository
 {
-    private readonly IDataExplorerClient _dataExplorerClient;
+    private readonly IClient _dataExplorerClient;
 
-    public DataExplorerRepository(IDataExplorerClient dataExplorerClient)
+    public Repository(IClient dataExplorerClient)
     {
         _dataExplorerClient = dataExplorerClient;
     }
