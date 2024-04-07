@@ -2,13 +2,13 @@
 // Cosmos Data Explorer
 // ------------------------------------
 
-using BlazorCosmosDataExplorer.Models;
+using System.Dynamic;
 
 namespace BlazorCosmosDataExplorer;
 
 public interface IDataExplorerProcessor
 {
-    Task DownloadExcel(List<object> domainModels);
+    Task DownloadExcel(List<ExpandoObject> domainModels);
 
-    Task<List<object>> Process(QueryInput query);
+    Task<List<ExpandoObject>> Process(QueryInput query);
 }

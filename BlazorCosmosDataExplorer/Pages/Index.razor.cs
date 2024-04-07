@@ -6,6 +6,7 @@ using BlazorCosmosDataExplorer.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.JSInterop;
+using System.Dynamic;
 
 namespace BlazorCosmosDataExplorer.Pages;
 
@@ -13,14 +14,6 @@ namespace BlazorCosmosDataExplorer.Pages;
 
 public partial class Index : ComponentBase
 {
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (firstRender)
-        {
-            await JSRuntime.InvokeVoidAsync("preventShiftEnter", "query_field");
-        }
-    }
-
     [Inject]
     private IDataExplorerProcessor _dataExplorerProcessor { get; set; }
 
@@ -39,7 +32,16 @@ public partial class Index : ComponentBase
 
     private string Query { get; set; } = "select * from c where c.partitionKey = \"partitionKey_01\"";
 
-    private List<object> Results { get; set; } = new();
+    private List<ExpandoObject> Results { get; set; } = new();
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JSRuntime.InvokeVoidAsync("preventShiftEnter", "query_field");
+        }
+    }
+
     //private void DeDupe()
     //{
     //    var deDupedResults = Results.GroupBy(x => x.Id).Select(x => x.First()).ToList();

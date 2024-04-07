@@ -4,7 +4,6 @@
 
 using Azure.Identity;
 using BlazorCosmosDataExplorer;
-using BlazorCosmosDataExplorer.Configuration;
 using Microsoft.Azure.Cosmos;
 
 var builder = WebApplication.CreateBuilder(args);

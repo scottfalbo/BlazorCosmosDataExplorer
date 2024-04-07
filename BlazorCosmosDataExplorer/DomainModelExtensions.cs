@@ -2,11 +2,13 @@
 // Cosmos Data Explorer
 // ------------------------------------
 
+using System.Dynamic;
+
 namespace BlazorCosmosDataExplorer.Models;
 
 public static class DomainModelExtensions
 {
-    public static List<object> SortResults(this List<object> results, string columnName, bool ascending)
+    public static List<ExpandoObject> SortResults(this List<ExpandoObject> results, string columnName, bool ascending)
     {
         var propertyInfo = typeof(object).GetProperty(columnName);
         if (propertyInfo == null) return results;
