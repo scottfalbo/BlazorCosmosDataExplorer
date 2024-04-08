@@ -14,6 +14,9 @@ namespace BlazorCosmosDataExplorer.Pages;
 public partial class Index : ComponentBase
 {
     [Inject]
+    private IJSRuntime _jSRuntime { get; set; }
+
+    [Inject]
     private IProcessor _processor { get; set; }
 
     private string Container { get; set; }
@@ -28,9 +31,6 @@ public partial class Index : ComponentBase
 
     private bool IsSortAscending { get; set; } = true;
 
-    [Inject]
-    private IJSRuntime JSRuntime { get; set; }
-
     private string Query { get; set; } = "select * from c where c.partitionKey = \"partitionKey_01\"";
 
     private List<dynamic> Results { get; set; } = new();
@@ -39,7 +39,7 @@ public partial class Index : ComponentBase
     {
         if (firstRender)
         {
-            await JSRuntime.InvokeVoidAsync("preventShiftEnter", "query_field");
+            await _jSRuntime.InvokeVoidAsync("preventShiftEnter", "query_field");
         }
     }
 
@@ -65,7 +65,6 @@ public partial class Index : ComponentBase
     private Task HandleFormSubmit()
     {
         // Prevent the form from submitting when the Enter key is pressed without Shift.
-        // This is called on form submission, which we don't want to happen on just Enter.
         return Task.CompletedTask;
     }
 
