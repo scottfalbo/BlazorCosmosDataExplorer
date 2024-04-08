@@ -44,16 +44,13 @@ public partial class Index : ComponentBase
     protected override async Task OnInitializedAsync()
     {
         DatabasesAndContainers = await _processor.GetDatabasesAndContainers();
-        Database = DatabasesAndContainers.Keys.FirstOrDefault();
-        Container = DatabasesAndContainers[Database].FirstOrDefault();
-    }
 
-    //private void DeDupe()
-    //{
-    //    var deDupedResults = Results.GroupBy(x => x.Id).Select(x => x.First()).ToList();
-    //    Results.Clear();
-    //    Results.AddRange(deDupedResults);
-    //}
+        if (DatabasesAndContainers.Any())
+        {
+            Database = DatabasesAndContainers.Keys.First();
+            Container = DatabasesAndContainers[Database].First();
+        }
+    }
 
     private void DownloadExcel()
     {
@@ -86,7 +83,6 @@ public partial class Index : ComponentBase
         var results = await _processor.Process(queryInput);
 
         Results.AddRange(results);
-        //DeDupe();
     }
 
     private void SelectContainer(string database, string container)
