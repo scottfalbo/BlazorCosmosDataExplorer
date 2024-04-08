@@ -4,15 +4,31 @@
 
 <h1>Cosmos Data Explorer</h1>
 
+@if (DatabasesAndContainers == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    foreach (var database in DatabasesAndContainers)
+    {
+        <div>
+            <strong>@database.Key</strong>
+            @foreach (var container in database.Value)
+            {
+                <div>
+                    <input type="radio" id="@container" name="selectedContainer" @onclick="() => SelectContainer(database.Key, container)" />
+                    <label for="@container">@container</label>
+                </div>
+            }
+        </div>
+    }
+}
+
 <form @onsubmit="HandleFormSubmit">
     <textarea id="query_field" @bind="Query" @onkeydown="HandleKeyDown" rows="10"></textarea>
     <button type="button" @onclick="ProcessQuery">Search</button>
 </form>
-
-<label class="switch">
-    <input type="checkbox" @bind="AppendResults">
-    <span class="slider round"></span>
-</label>
 
 <button @onclick="DownloadExcel">Download Excel</button>
 

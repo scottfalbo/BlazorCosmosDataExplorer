@@ -16,8 +16,6 @@ public partial class Index : ComponentBase
     [Inject]
     private IProcessor _processor { get; set; }
 
-    private bool AppendResults { get; set; } = false;
-
     private string Container { get; set; }
 
     private string CurrentSortColumn { get; set; }
@@ -82,16 +80,19 @@ public partial class Index : ComponentBase
 
     private async Task ProcessQuery()
     {
-        if (!AppendResults)
-        {
-            Results.Clear();
-        }
+        Results.Clear();
 
         var queryInput = new QueryInput(Query, Container, Database);
         var results = await _processor.Process(queryInput);
 
         Results.AddRange(results);
         //DeDupe();
+    }
+
+    private void SelectContainer(string database, string container)
+    {
+        Database = database;
+        Container = container;
     }
 
     private void SortTable(string columnName)
