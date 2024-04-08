@@ -24,21 +24,22 @@ public class Repository : IRepository
         var iterator = _client.GetDatabaseQueryIterator<DatabaseProperties>();
         var databases = await iterator.ReadNextAsync();
 
-        foreach (var db in databases)
+        foreach (var database in databases)
         {
             var containersList = new List<string>();
-            Database databaseRef = _client.GetDatabase(db.Id);
+            var databaseRef = _client.GetDatabase(database.Id);
             var containerIterator = databaseRef.GetContainerQueryIterator<ContainerProperties>();
-            do
+
+            while (containerIterator.HasMoreResults)
             {
                 var containers = await containerIterator.ReadNextAsync();
                 foreach (var container in containers)
                 {
                     containersList.Add(container.Id);
                 }
-            } while (containerIterator.HasMoreResults);
+            }
 
-            databasesAndContainers.Add(db.Id, containersList);
+            databasesAndContainers.Add(database.Id, containersList);
         }
 
         return databasesAndContainers;
@@ -55,11 +56,12 @@ public class Repository : IRepository
 
             using var resultIterator = container.GetItemQueryIterator<ExpandoObject>(queryDefinition);
 
-            while (resultIterator.HasMoreResults)
+            do
             {
                 var storageResults = await resultIterator.ReadNextAsync();
                 results.AddRange(storageResults);
             }
+            while (resultIterator.HasMoreResults);
 
             return results;
         }

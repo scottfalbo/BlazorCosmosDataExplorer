@@ -14,15 +14,17 @@ namespace BlazorCosmosDataExplorer.Pages;
 public partial class Index : ComponentBase
 {
     [Inject]
-    private IProcessor _dataExplorerProcessor { get; set; }
+    private IProcessor _processor { get; set; }
 
     private bool AppendResults { get; set; } = false;
 
-    private string Container { get; set; } = "ContainerOne";
+    private string Container { get; set; }
 
     private string CurrentSortColumn { get; set; }
 
-    private string Database { get; set; } = "PaleSpecter";
+    private string Database { get; set; }
+
+    private Dictionary<string, List<string>> DatabasesAndContainers { get; set; }
 
     private bool IsSortAscending { get; set; } = true;
 
@@ -41,6 +43,13 @@ public partial class Index : ComponentBase
         }
     }
 
+    protected override async Task OnInitializedAsync()
+    {
+        DatabasesAndContainers = await _processor.GetDatabasesAndContainers();
+        Database = DatabasesAndContainers.Keys.FirstOrDefault();
+        Container = DatabasesAndContainers[Database].FirstOrDefault();
+    }
+
     //private void DeDupe()
     //{
     //    var deDupedResults = Results.GroupBy(x => x.Id).Select(x => x.First()).ToList();
@@ -52,7 +61,7 @@ public partial class Index : ComponentBase
     {
         if (Results.Count > 0)
         {
-            _dataExplorerProcessor.DownloadExcel(Results);
+            _processor.DownloadExcel(Results);
         }
     }
 
@@ -79,7 +88,7 @@ public partial class Index : ComponentBase
         }
 
         var queryInput = new QueryInput(Query, Container, Database);
-        var results = await _dataExplorerProcessor.Process(queryInput);
+        var results = await _processor.Process(queryInput);
 
         Results.AddRange(results);
         //DeDupe();
