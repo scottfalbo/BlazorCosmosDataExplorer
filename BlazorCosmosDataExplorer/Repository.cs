@@ -10,24 +10,24 @@ namespace BlazorCosmosDataExplorer;
 
 public class Repository : IRepository
 {
-    private readonly CosmosClient _client;
+    private readonly CosmosClient _cosmosClient;
 
     public Repository(IClient client)
     {
-        _client = client.CreateClient();
+        _cosmosClient = client.CreateClient();
     }
 
     public async Task<Dictionary<string, List<string>>> GetDatabasesAndContainers()
     {
         var databasesAndContainers = new Dictionary<string, List<string>>();
 
-        var iterator = _client.GetDatabaseQueryIterator<DatabaseProperties>();
+        var iterator = _cosmosClient.GetDatabaseQueryIterator<DatabaseProperties>();
         var databases = await iterator.ReadNextAsync();
 
         foreach (var database in databases)
         {
             var containersList = new List<string>();
-            var databaseRef = _client.GetDatabase(database.Id);
+            var databaseRef = _cosmosClient.GetDatabase(database.Id);
             var containerIterator = databaseRef.GetContainerQueryIterator<ContainerProperties>();
 
             while (containerIterator.HasMoreResults)
@@ -47,7 +47,7 @@ public class Repository : IRepository
 
     public async Task<List<ExpandoObject>> GetItems(QueryInput queryInput)
     {
-        var container = _client.GetContainer(queryInput.Database, queryInput.Container);
+        var container = _cosmosClient.GetContainer(queryInput.Database, queryInput.Container);
 
         try
         {

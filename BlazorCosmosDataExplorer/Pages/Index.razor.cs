@@ -24,6 +24,8 @@ public partial class Index : ComponentBase
 
     private Dictionary<string, List<string>> DatabasesAndContainers { get; set; }
 
+    private List<dynamic> FilteredResults { get; set; } = new();
+
     private bool IsSortAscending { get; set; } = true;
 
     [Inject]
@@ -54,9 +56,9 @@ public partial class Index : ComponentBase
 
     private void DownloadExcel()
     {
-        if (Results.Count > 0)
+        if (FilteredResults.Count > 0)
         {
-            _processor.DownloadExcel(Results);
+            _processor.DownloadExcel(Results, FilteredResults);
         }
     }
 
@@ -77,12 +79,13 @@ public partial class Index : ComponentBase
 
     private async Task ProcessQuery()
     {
-        Results.Clear();
+        FilteredResults.Clear();
 
         var queryInput = new QueryInput(Query, Container, Database);
         var results = await _processor.Process(queryInput);
 
         Results.AddRange(results);
+        FilteredResults.AddRange(results);
     }
 
     private void SelectContainer(string database, string container)
@@ -103,7 +106,7 @@ public partial class Index : ComponentBase
             IsSortAscending = true;
         }
 
-        Results = Results.SortResults(CurrentSortColumn, IsSortAscending);
+        FilteredResults = FilteredResults.SortResults(CurrentSortColumn, IsSortAscending);
     }
 }
 

@@ -2,21 +2,21 @@
 
 @code {
     [Parameter]
-    public List<object>? Results { get; set; }
+    public List<object>? FilteredResults { get; set; }
 
     [Parameter]
     public EventCallback<string> OnSortRequest { get; set; }
 
 }
 
-@if (Results != null && Results.Count > 0)
+@if (FilteredResults != null && FilteredResults.Count > 0)
 {
     <table class="table">
         <thead>
             <tr>
-                @if (Results != null && Results.Any())
+                @if (FilteredResults != null && FilteredResults.Any())
                 {
-                    var firstItem = Results.First();
+                    var firstItem = FilteredResults.First();
                     foreach (var property in ((IDictionary<string, object>)firstItem).Keys)
                     {
                         <th @onclick="() => OnSortRequest.InvokeAsync(property)">@property</th>
@@ -25,7 +25,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Results!)
+            @foreach (var item in FilteredResults!)
             {
                 <tr>
                     @foreach (var kvp in (IDictionary<string, object>)item)

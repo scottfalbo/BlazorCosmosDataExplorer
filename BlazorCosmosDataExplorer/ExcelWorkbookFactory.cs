@@ -8,11 +8,12 @@ namespace BlazorCosmosDataExplorer;
 
 public class ExcelWorkbookFactory : IExcelWorkbookFactory
 {
-    public byte[] Create(List<dynamic> domainModels)
+    public byte[] Create(List<dynamic> results, List<dynamic> filteredResults)
     {
         using var workbook = new XLWorkbook();
 
-        AddWorksheet(workbook, "Sample_Data", domainModels);
+        AddWorksheet(workbook, "Filtered_Results", filteredResults);
+        AddWorksheet(workbook, "Full Results", results);
 
         using var stream = new MemoryStream();
         workbook.SaveAs(stream);

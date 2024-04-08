@@ -35,9 +35,9 @@ else
 
 <button @onclick="DownloadExcel">Download Excel</button>
 
-@if (Results.Count > 0)
+@if (FilteredResults.Count > 0)
 {
-    <DomainModelView Results=Results OnSortRequest="SortTable" />
+    <DomainModelView FilteredResults=FilteredResults OnSortRequest="SortTable" />
 }
 else
 {
