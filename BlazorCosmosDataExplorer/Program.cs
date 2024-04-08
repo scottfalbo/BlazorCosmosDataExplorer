@@ -2,20 +2,17 @@
 // Cosmos Data Explorer
 // ------------------------------------
 
-using Azure.Identity;
 using BlazorCosmosDataExplorer;
 using Microsoft.Azure.Cosmos;
 
 var builder = WebApplication.CreateBuilder(args);
-var serviceConfiguration = CreateServiceConfiguration(builder, builder.Configuration);
 
-var cosmosEndpoint = serviceConfiguration.CosmosEndpoint;
-var cosmosKey = serviceConfiguration.CosmosKey;
-var cosmosClient = new CosmosClient(cosmosEndpoint, cosmosKey);
+var cosmosEndpoint = builder.Configuration["CosmosEndpoint"];
+var cosmosKey = builder.Configuration["CosmosKey"];
 
-builder.Services.AddSingleton<IClient, Client>(sp =>
+builder.Services.AddSingleton<IClient, Client>(x =>
 {
-    var cosmosClient = new CosmosClient(serviceConfiguration.CosmosEndpoint, serviceConfiguration.CosmosKey);
+    var cosmosClient = new CosmosClient(cosmosEndpoint, cosmosKey);
     return new Client(cosmosClient);
 });
 
@@ -47,25 +44,3 @@ app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
 
 app.Run();
-
-static ServiceConfiguration CreateServiceConfiguration(WebApplicationBuilder builder, IConfiguration configuration)
-{
-    var keyVaultUri = configuration["KeyVaultUri"];
-
-    builder.Configuration
-        .SetBasePath(Directory.GetCurrentDirectory())
-        .AddJsonFile("appsettings.json")
-        .AddUserSecrets(builder.Environment.ApplicationName);
-
-    var clientId = configuration["Azure:ClientId"];
-    var clientSecret = configuration["Azure:ClientSecret"];
-    var tenantId = configuration["Azure:TenantId"];
-
-    builder.Configuration.AddAzureKeyVault(new Uri(keyVaultUri), new ClientSecretCredential(tenantId, clientId, clientSecret));
-
-    var serviceConfiguration = new ServiceConfiguration();
-    builder.Configuration.Bind(serviceConfiguration);
-
-    builder.Services.AddSingleton(serviceConfiguration);
-    return serviceConfiguration;
-}
