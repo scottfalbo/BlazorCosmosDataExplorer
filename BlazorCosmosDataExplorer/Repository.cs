@@ -2,6 +2,7 @@
 // Cosmos Data Explorer
 // ------------------------------------
 
+using BlazorCosmosDataExplorer.Models;
 using Microsoft.Azure.Cosmos;
 using System.Dynamic;
 using System.Net;

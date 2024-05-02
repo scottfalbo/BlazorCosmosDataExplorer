@@ -3,6 +3,7 @@
 // ------------------------------------
 
 using System.Dynamic;
+using BlazorCosmosDataExplorer.Models;
 
 namespace BlazorCosmosDataExplorer;
 

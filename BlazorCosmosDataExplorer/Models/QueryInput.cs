@@ -2,7 +2,7 @@
 // Cosmos Data Explorer
 // ------------------------------------
 
-namespace BlazorCosmosDataExplorer;
+namespace BlazorCosmosDataExplorer.Models;
 
 public record QueryInput
 {
