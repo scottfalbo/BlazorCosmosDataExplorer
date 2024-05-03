@@ -27,6 +27,8 @@ public class Processor : IProcessor
         _jsRuntime = jSRuntime;
     }
 
+    public IDatabaseLookup DatabaseLookup => _databaseLookup;
+
     public async Task DownloadExcel(List<dynamic> results, List<dynamic> filteredResults)
     {
         var excelData = _excelWorkbookFactory.Create(results, filteredResults);
@@ -38,8 +40,6 @@ public class Processor : IProcessor
 
         await _jsRuntime.InvokeVoidAsync("downloadFileFromBase64", fileName, dataUrl);
     }
-
-    public IDatabaseLookup DatabaseLookup()=> _databaseLookup;
 
     public async Task<List<ExpandoObject>> Process(QueryInput queryInput)
     {
