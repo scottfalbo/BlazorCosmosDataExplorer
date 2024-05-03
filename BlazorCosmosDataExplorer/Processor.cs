@@ -27,7 +27,7 @@ public class Processor : IProcessor
         _jsRuntime = jSRuntime;
     }
 
-    public IDatabaseLookup DatabaseLookup => _databaseLookup;
+    public IDatabaseLookup DatabaseLookup() => _databaseLookup;
 
     public async Task DownloadExcel(List<dynamic> results, List<dynamic> filteredResults)
     {
