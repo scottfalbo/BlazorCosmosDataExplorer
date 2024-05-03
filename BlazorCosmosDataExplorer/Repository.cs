@@ -18,34 +18,6 @@ public class Repository : IRepository
         _cosmosClient = client.CreateClient();
     }
 
-    public async Task<Dictionary<string, List<string>>> GetDatabasesAndContainers()
-    {
-        var databasesAndContainers = new Dictionary<string, List<string>>();
-
-        var iterator = _cosmosClient.GetDatabaseQueryIterator<DatabaseProperties>();
-        var databases = await iterator.ReadNextAsync();
-
-        foreach (var database in databases)
-        {
-            var containersList = new List<string>();
-            var databaseRef = _cosmosClient.GetDatabase(database.Id);
-            var containerIterator = databaseRef.GetContainerQueryIterator<ContainerProperties>();
-
-            while (containerIterator.HasMoreResults)
-            {
-                var containers = await containerIterator.ReadNextAsync();
-                foreach (var container in containers)
-                {
-                    containersList.Add(container.Id);
-                }
-            }
-
-            databasesAndContainers.Add(database.Id, containersList);
-        }
-
-        return databasesAndContainers;
-    }
-
     public async Task<List<ExpandoObject>> GetItems(QueryInput queryInput)
     {
         var container = _cosmosClient.GetContainer(queryInput.Database, queryInput.Container);

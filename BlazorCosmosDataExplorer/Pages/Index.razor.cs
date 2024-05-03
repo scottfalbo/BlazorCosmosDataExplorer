@@ -14,6 +14,9 @@ namespace BlazorCosmosDataExplorer.Pages;
 public partial class Index : ComponentBase
 {
     [Inject]
+    private IDatabaseLookup DatabaseLookup { get; set; }
+
+    [Inject]
     private IJSRuntime _jSRuntime { get; set; }
 
     [Inject]
@@ -25,9 +28,9 @@ public partial class Index : ComponentBase
 
     private string Database { get; set; }
 
-    private Dictionary<string, List<string>> DatabasesAndContainers { get; set; }
-
     private List<dynamic> FilteredResults { get; set; } = new();
+
+    private List<string> IndexedProperties { get; set; } = new();
 
     private bool IsSortAscending { get; set; } = true;
 
@@ -43,14 +46,13 @@ public partial class Index : ComponentBase
         }
     }
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
-        DatabasesAndContainers = await _processor.GetDatabasesAndContainers();
-
-        if (DatabasesAndContainers.Any())
+        if (DatabaseLookup.Any())
         {
-            Database = DatabasesAndContainers.Keys.First();
-            Container = DatabasesAndContainers[Database].First();
+            Database = DatabaseLookup.First().Key;
+            Container = DatabaseLookup.First().Value.First().Key;
+            IndexedProperties = DatabaseLookup.First().Value.First().Value.ToList();
         }
     }
 
@@ -91,6 +93,7 @@ public partial class Index : ComponentBase
     {
         Database = database;
         Container = container;
+        IndexedProperties = DatabaseLookup[database][container].ToList();
     }
 
     private void SortTable(string columnName)

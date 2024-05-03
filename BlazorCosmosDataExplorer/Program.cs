@@ -3,18 +3,21 @@
 // ------------------------------------
 
 using BlazorCosmosDataExplorer;
+using BlazorCosmosDataExplorer.Models;
 using Microsoft.Azure.Cosmos;
 
 var builder = WebApplication.CreateBuilder(args);
 
 var cosmosEndpoint = builder.Configuration["CosmosEndpoint"];
 var cosmosKey = builder.Configuration["CosmosKey"];
+var cosmosClient = new CosmosClient(cosmosEndpoint, cosmosKey);
 
 builder.Services.AddSingleton<IClient, Client>(x =>
 {
-    var cosmosClient = new CosmosClient(cosmosEndpoint, cosmosKey);
     return new Client(cosmosClient);
 });
+
+await builder.Services.AddDatabaseLookup(cosmosClient);
 
 builder.Services.AddTransient<IProcessor, Processor>();
 builder.Services.AddTransient<IRepository, Repository>();

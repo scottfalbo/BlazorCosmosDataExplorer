@@ -4,28 +4,28 @@
 
 <h1>Cosmos Data Explorer</h1>
 
-@if (DatabasesAndContainers == null)
+@if (DatabaseLookup == null)
 {
     <p>Loading...</p>
 }
 else
 {
-    foreach (var database in DatabasesAndContainers)
+    foreach (var database in DatabaseLookup)
     {
         <div>
             <strong>@database.Key</strong>
             @foreach (var container in database.Value)
             {
                 <div>
-                    <input type="radio" id="@($"{database.Key}_{container}")" name="selectedContainer"
-                           @onclick="() => SelectContainer(database.Key, container)"
-                           checked="@(Database == database.Key && Container == container)" />
-                    <label for="@($"{database.Key}_{container}")">@container</label>
-
+                    <input type="radio" id="@($"{database.Key}_{container.Key}")" name="selectedContainer"
+                           @onclick="() => SelectContainer(database.Key, container.Key)"
+                           checked="@(Database == database.Key && Container == container.Key)" />
+                    <label for="@($"{database.Key}_{container.Key}")">@container.Key</label>
                 </div>
             }
         </div>
     }
+    <p>Indexed Properties: @string.Join(", ", IndexedProperties)</p>
 }
 
 <form @onsubmit="HandleFormSubmit">
