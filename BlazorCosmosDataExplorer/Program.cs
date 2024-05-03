@@ -4,20 +4,29 @@
 
 using BlazorCosmosDataExplorer;
 using BlazorCosmosDataExplorer.Models;
-using Microsoft.Azure.Cosmos;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var cosmosEndpoint = builder.Configuration["CosmosEndpoint"];
-var cosmosKey = builder.Configuration["CosmosKey"];
-var cosmosClient = new CosmosClient(cosmosEndpoint, cosmosKey);
+var cosmosAccountsSection = builder.Configuration.GetSection("CosmosAccounts");
+var cosmosAccounts = new List<CosmosAccountConfiguration>();
+cosmosAccountsSection.Bind(cosmosAccounts);
 
-builder.Services.AddSingleton<IClient, Client>(x =>
+var serviceConfiguration = new ServiceConfiguration
 {
-    return new Client(cosmosClient);
-});
+    CosmosAccounts = cosmosAccounts
+};
 
-await builder.Services.AddDatabaseLookup(cosmosClient);
+foreach (var configuration in serviceConfiguration.CosmosAccounts)
+{
+    builder.Services.AddSingleton(typeof(CosmosClient<>).MakeGenericType(Type.GetType(configuration.AccountName)),
+        serviceProvider =>
+        {
+            var factory = serviceProvider.GetRequiredService<ICosmosClientFactory>();
+            return factory.CreateCosmosClient(configuration.Endpoint, configuration.Key);
+        });
+}
+
+//await builder.Services.AddDatabaseLookup(cosmosClient);
 
 builder.Services.AddTransient<IProcessor, Processor>();
 builder.Services.AddTransient<IRepository, Repository>();
