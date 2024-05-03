@@ -38,7 +38,9 @@ public class Processor : IProcessor
 
         await _jsRuntime.InvokeVoidAsync("downloadFileFromBase64", fileName, dataUrl);
     }
-    
+
+    public IDatabaseLookup DatabaseLookup()=> _databaseLookup;
+
     public async Task<List<ExpandoObject>> Process(QueryInput queryInput)
     {
         var response = await _repository.GetItems(queryInput);

@@ -11,5 +11,7 @@ public interface IProcessor
 {
     Task DownloadExcel(List<dynamic> results, List<dynamic> filteredResults);
 
+    IDatabaseLookup DatabaseLookup();
+
     Task<List<ExpandoObject>> Process(QueryInput query);
 }

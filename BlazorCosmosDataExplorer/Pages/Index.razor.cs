@@ -14,9 +14,6 @@ namespace BlazorCosmosDataExplorer.Pages;
 public partial class Index : ComponentBase
 {
     [Inject]
-    private IDatabaseLookup DatabaseLookup { get; set; }
-
-    [Inject]
     private IJSRuntime _jSRuntime { get; set; }
 
     [Inject]
@@ -27,6 +24,8 @@ public partial class Index : ComponentBase
     private string CurrentSortColumn { get; set; }
 
     private string Database { get; set; }
+
+    private IDatabaseLookup DatabaseLookup { get; set; }
 
     private List<dynamic> FilteredResults { get; set; } = new();
 
@@ -48,12 +47,10 @@ public partial class Index : ComponentBase
 
     protected override void OnInitialized()
     {
-        if (DatabaseLookup.Any())
-        {
-            Database = DatabaseLookup.First().Key;
-            Container = DatabaseLookup.First().Value.First().Key;
-            IndexedProperties = DatabaseLookup.First().Value.First().Value.ToList();
-        }
+        DatabaseLookup = _processor.DatabaseLookup();
+        Database = DatabaseLookup.FirstOrDefault().Key;
+        Container = DatabaseLookup[Database].FirstOrDefault().Key;
+        IndexedProperties = DatabaseLookup[Database][Container].ToList();
     }
 
     private void DownloadExcel()
