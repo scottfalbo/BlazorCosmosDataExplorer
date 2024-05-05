@@ -4,7 +4,7 @@
 
 using Microsoft.Azure.Cosmos;
 
-namespace BlazorCosmosDataExplorer;
+namespace BlazorCosmosDataExplorer.Configuration;
 
 public interface ICosmosClientFactory
 {

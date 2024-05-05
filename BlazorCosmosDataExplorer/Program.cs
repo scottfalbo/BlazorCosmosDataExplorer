@@ -3,7 +3,7 @@
 // ------------------------------------
 
 using BlazorCosmosDataExplorer;
-using BlazorCosmosDataExplorer.Models;
+using BlazorCosmosDataExplorer.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,17 +16,18 @@ var serviceConfiguration = new ServiceConfiguration
     CosmosAccounts = cosmosAccounts
 };
 
-foreach (var configuration in serviceConfiguration.CosmosAccounts)
+foreach (var cosmosAccountConfiguration in serviceConfiguration.CosmosAccounts)
 {
-    builder.Services.AddSingleton(typeof(CosmosClient<>).MakeGenericType(Type.GetType(configuration.AccountName)),
+    builder.Services.AddSingleton(typeof(ICosmosClientAdapter).MakeGenericType(Type.GetType(cosmosAccountConfiguration.AccountName)!),
         serviceProvider =>
         {
-            var factory = serviceProvider.GetRequiredService<ICosmosClientFactory>();
-            return factory.CreateCosmosClient(configuration.Endpoint, configuration.Key);
+            var cosmosClientFactory = serviceProvider.GetRequiredService<ICosmosClientFactory>();
+            var cosmosClient = cosmosClientFactory.CreateCosmosClient(cosmosAccountConfiguration.Endpoint, cosmosAccountConfiguration.Key);
+            return cosmosClient;
         });
 }
 
-//await builder.Services.AddDatabaseLookup(cosmosClient);
+// await builder.Services.AddDatabaseLookup(cosmosClient);
 
 builder.Services.AddTransient<IProcessor, Processor>();
 builder.Services.AddTransient<IRepository, Repository>();
