@@ -2,10 +2,6 @@
 // Cosmos Data Explorer
 // ------------------------------------
 
-// ------------------------------------
-// Cosmos Data Explorer
-// ------------------------------------
-
 namespace BlazorCosmosDataExplorer.Configuration;
 
 #nullable disable
