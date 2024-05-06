@@ -9,6 +9,19 @@ namespace BlazorCosmosDataExplorer.Configuration;
 
 public static class IServiceCollectionExtensions
 {
+    public static void AddCosmosClients(this IServiceCollection serviceCollection, ServiceConfiguration serviceConfiguration)
+    {
+        foreach (var cosmosAccountConfiguration in serviceConfiguration.CosmosAccounts)
+        {
+            serviceCollection.AddSingleton(typeof(ICosmosClientAdapter).MakeGenericType(Type.GetType(cosmosAccountConfiguration.AccountName)!),
+                serviceProvider =>
+                {
+                    var cosmosClient = new CosmosClient(cosmosAccountConfiguration.Endpoint, cosmosAccountConfiguration.Key);
+                    return new CosmosClientAdapter(cosmosClient);
+                });
+        }
+    }
+
     public static async Task AddDatabaseLookup(this IServiceCollection serviceCollection, CosmosClient cosmosClient)
     {
         var databaseLookup = new Dictionary<string, IContainerLookup>();

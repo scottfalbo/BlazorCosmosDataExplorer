@@ -10,8 +10,8 @@ public class CosmosClientAdapter : ICosmosClientAdapter
 {
     private readonly CosmosClient _cosmosClient;
 
-    public CosmosClientAdapter(ICosmosClientFactory cosmosClientFactory, CosmosAccountConfiguration cosmosAccountConfiguration)
+    public CosmosClientAdapter(CosmosClient cosmosClient)
     {
-        _cosmosClient = cosmosClientFactory.CreateCosmosClient(cosmosAccountConfiguration.Endpoint, cosmosAccountConfiguration.Key);
+        _cosmosClient = cosmosClient;
     }
 }

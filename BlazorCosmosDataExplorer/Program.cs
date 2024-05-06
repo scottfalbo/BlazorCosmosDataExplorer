@@ -16,19 +16,8 @@ var serviceConfiguration = new ServiceConfiguration
     CosmosAccounts = cosmosAccounts
 };
 
-foreach (var cosmosAccountConfiguration in serviceConfiguration.CosmosAccounts)
-{
-    builder.Services.AddSingleton(typeof(ICosmosClientAdapter).MakeGenericType(Type.GetType(cosmosAccountConfiguration.AccountName)!),
-        serviceProvider =>
-        {
-            var cosmosClientFactory = serviceProvider.GetRequiredService<ICosmosClientFactory>();
-            var cosmosClient = cosmosClientFactory.CreateCosmosClient(cosmosAccountConfiguration.Endpoint, cosmosAccountConfiguration.Key);
-            return cosmosClient;
-        });
-}
-
+builder.Services.AddCosmosClients(serviceConfiguration);
 // await builder.Services.AddDatabaseLookup(cosmosClient);
-
 builder.Services.AddTransient<IProcessor, Processor>();
 builder.Services.AddTransient<IRepository, Repository>();
 builder.Services.AddTransient<IExcelWorkbookFactory, ExcelWorkbookFactory>();
